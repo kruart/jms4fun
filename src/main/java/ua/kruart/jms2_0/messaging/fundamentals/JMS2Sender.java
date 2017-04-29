@@ -1,4 +1,4 @@
-package ua.kruart.jms2_0.messaging;
+package ua.kruart.jms2_0.messaging.fundamentals;
 
 import com.sun.messaging.ConnectionConfiguration;
 import com.sun.messaging.ConnectionFactory;
