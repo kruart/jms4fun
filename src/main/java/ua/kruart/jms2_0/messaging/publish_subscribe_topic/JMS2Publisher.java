@@ -1,4 +1,4 @@
-package ua.kruart.jms2_0.messaging.new_features.publish_subscribe_topic.pub_sub_basics;
+package ua.kruart.jms2_0.messaging.publish_subscribe_topic;
 
 import com.sun.messaging.ConnectionFactory;
 

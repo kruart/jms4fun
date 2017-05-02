@@ -1,4 +1,4 @@
-package ua.kruart.jms2_0.messaging.new_features.publish_subscribe_topic.pub_sub_basics;
+package ua.kruart.jms2_0.messaging.publish_subscribe_topic;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 
@@ -7,15 +7,15 @@ import javax.jms.*;
 /**
  * Created by kruart on 02.05.2017.
  */
-public class JMSSubscriberNonDurable implements MessageListener {
+public class JMSSubscriberDurable implements MessageListener {
 
-    public JMSSubscriberNonDurable() {
+    public JMSSubscriberDurable() {
         try {
-            TopicConnection connection = new ActiveMQConnectionFactory("tcp://localhost:61616").createTopicConnection();
+            TopicConnection connection = new ActiveMQConnectionFactory("tcp://localhost:61616?jms.clientID=client:123").createTopicConnection();
             connection.start();
             TopicSession session = connection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
             Topic topic = session.createTopic("EM_TRADE.T");
-            TopicSubscriber subscriber = session.createSubscriber(topic);
+            TopicSubscriber subscriber = session.createDurableSubscriber(topic, "sub:123");
             subscriber.setMessageListener(this);
             System.out.println("Waiting for message...");
         } catch (Exception e) {
@@ -34,6 +34,6 @@ public class JMSSubscriberNonDurable implements MessageListener {
     }
 
     public static void main(String[] args) {
-        new Thread(JMSSubscriberNonDurable::new).start();
+        new Thread(JMSSubscriberDurable::new).start();
     }
 }
