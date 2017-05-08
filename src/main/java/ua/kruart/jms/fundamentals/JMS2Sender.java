@@ -15,7 +15,7 @@ public class JMS2Sender {
     public static void main(String[] args) throws JMSException {
         ConnectionFactory cf = new ConnectionFactory();
         cf.setProperty(ConnectionConfiguration.imqAddressList, "mq://localhost:7676");
-        cf.createConnection();
+
         try(JMSContext jmsContext = cf.createContext()) {
             Queue queue = jmsContext.createQueue("EM_JMS2_TRADE.Q");
             jmsContext
