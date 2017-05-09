@@ -1,0 +1,3 @@
+file based technique - sends only path to the file and receiver download it himself
+payload based technique - can send to receiver only small files like images
+streaming based technique - uses stream and can send to receiver large files(in parts) like books, video and etc.
