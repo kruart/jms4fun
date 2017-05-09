@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jms="http://www.springframework.org/schema/jms"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	   http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms.xsd">
+
+
+    <!--The JmsTemplate class is used for message production and synchronous message reception-->
+    <bean id="jndiTemplate" class="org.springframework.jndi.JndiTemplate">
+        <property name="environment">
+            <props>
+                <prop key="java.naming.factory.initial">org.apache.activemq.jndi.ActiveMQInitialContextFactory</prop>
+                <prop key="java.naming.provider.url">tcp://localhost:61616</prop>
+                <prop key="java.naming.security.principal">system</prop>
+                <prop key="java.naming.security.credentials">manager</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!--to perform dependency injection on your object’s references to JMS destinations-->
+    <bean id="jndiConnectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiTemplate" ref="jndiTemplate"/>
+        <property name="jndiName" value="ConnectionFactory"/>
+    </bean>
+
+    <!--Spring provides an implementation of the ConnectionFactory interface, SingleConnectionFactory,
+    that will return the same Connection on all createConnection() calls and ignore calls to close().
+    CachingConnectionFactory extends the functionality of SingleConnectionFactory and adds the caching of Sessions,
+    MessageProducers, and MessageConsumers-->
+    <bean id="connectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
+        <property name="targetConnectionFactory" ref="jndiConnectionFactory"/>
+        <property name="sessionCacheSize" value="1"/>
+    </bean>
+
+    <bean id="destinationResolver" class="org.springframework.jms.support.destination.JndiDestinationResolver">
+        <property name="jndiTemplate" ref="jndiTemplate"/>
+        <property name="cache" value="true"/>
+        <property name="fallbackToDynamicDestination" value="false"/>
+    </bean>
+
+
+
+
+</beans>        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
