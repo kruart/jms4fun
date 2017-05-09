@@ -40,8 +40,12 @@
         <property name="fallbackToDynamicDestination" value="false"/>
     </bean>
 
-
-
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="destinationResolver" ref="destinationResolver"/>
+        <property name="defaultDestinationName" value="EM_SP_TRADE.Q"/>
+        <property name="pubSubDomain" value="false"/> <!--false - point to point with queue; true- publish and subscribe with topic-->
+    </bean>
 
 </beans>        
 
