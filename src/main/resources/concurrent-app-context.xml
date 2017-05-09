@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:jms="http://www.springframework.org/schema/jms"
+		xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms-2.5.xsd">
+
+	<bean id="tradeProcessor" class="ua.kruart.jms.spring_jms.concurrent_consumers.TradeProcessor"/>
+
+	<bean id="queueConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory"> 
+   		<property name="brokerURL" value="tcp://localhost:61616"/> 
+	</bean> 
+
+	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate"> 
+	   <property name="connectionFactory" ref="queueConnectionFactory"/> 
+	   <property name="defaultDestinationName" value="TRADE.SPRING.Q"/> 
+	</bean> 
+
+	<bean id="messageListener" class="org.springframework.jms.listener.adapter.MessageListenerAdapter">
+       <property name="delegate" ref="tradeProcessor"/>
+       <property name="defaultListenerMethod" value="processTrade"/>
+    </bean>
+
+	<jms:listener-container connection-factory="queueConnectionFactory"
+				concurrency="60-60"> <!--I truly want 60 concurrent consumers sitting there waiting-->
+	<!-- concurrency="60"> that means I want maximum sixty consumers during processing-->
+       <jms:listener destination="TRADE.SPRING.Q" ref="messageListener"/>
+	</jms:listener-container>
+
+</beans>        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
